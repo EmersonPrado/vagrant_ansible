@@ -22,11 +22,13 @@ Vagrant.configure("2") do |config|
       :box => :debian_8,
       :ram => 512,
       :cpu => 1,
+      :ips => ["#{REDE}.2"],
     },
     'managed' => {
       :box => :debian_8,
       :ram => 512,
       :cpu => 1,
+      :ips => ["#{REDE}.3"],
     },
   }.each do |name, settings|
     config.vm.define name do |mv|
