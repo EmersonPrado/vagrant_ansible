@@ -23,6 +23,11 @@ Vagrant.configure("2") do |config|
       :ram => 512,
       :cpu => 1,
     },
+    'managed' => {
+      :box => :debian_8,
+      :ram => 512,
+      :cpu => 1,
+    },
   }.each do |name, settings|
     config.vm.define name do |mv|
       box = BOXES[settings[:box]]
