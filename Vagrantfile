@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
     config.vm.define name do |mv|
       box = BOXES[settings[:box]]
       mv.vm.box = box[:name]
-      mv.vm.box_version = box[:version] unless box[:version].nil?
+      mv.vm.box_version = box[:version] if box.has_key?(:version)
       mv.vm.host_name = "#{name}.#{DOMAIN}"
       mv.vm.provider 'virtualbox' do |virtualbox|
         virtualbox.name = "vagrant-ansible-#{name}"
@@ -42,11 +42,11 @@ Vagrant.configure("2") do |config|
         virtualbox.cpus = settings[:cpu]
         box[:custom].each do |custom|
           virtualbox.customize custom
-        end unless box[:custom].nil?
+        end if box.has_key?(:custom)
       end
       settings[:ips].each do |ip|
         mv.vm.network 'private_network', ip: ip
-      end unless settings[:ips].nil?
+      end if settings.has_key?(:ips)
     end
   end
 end
