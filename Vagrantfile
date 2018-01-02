@@ -47,6 +47,16 @@ Vagrant.configure("2") do |config|
       settings[:ips].each do |ip|
         mv.vm.network 'private_network', ip: ip
       end if settings.has_key?(:ips)
+      mv.vm.provision :shell do |shell|
+        shell.name = 'Configura proxy do APT'
+        shell.inline = "if ! diff -q $1 $2 2> $3 ; then cp $1 $2 ; $4 ; fi"
+        shell.args = [
+          '/vagrant/files/proxy',
+          '/etc/apt/apt.conf.d/proxy',
+          '/dev/null',
+          'apt-get update',
+        ]
+      end
     end
   end
 end

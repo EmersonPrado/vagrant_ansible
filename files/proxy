@@ -1,0 +1,14 @@
+Acquire {
+	http {
+		Proxy "http://www-mirrordf:3142/";
+		Proxy::www-mirrordf "DIRECT";
+	}
+	https {
+		Proxy "http://www-mirrordf:3142/";
+		Proxy::www-mirrordf "DIRECT";
+	}
+	ftp {
+		Proxy "http://www-mirrordf:3142/";
+		Proxy::www-mirrordf "DIRECT";
+	}
+}
