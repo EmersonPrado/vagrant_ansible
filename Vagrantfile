@@ -68,6 +68,21 @@ Vagrant.configure("2") do |config|
           'apt-get update',
         ]
       end
+      unless settings.has_key?(:ansible)
+        mv.vm.provision :shell do |shell|
+          shell.name = 'Cria diretório de chaves'
+          shell.inline = '[ -d ".ssh" ] || mkdir .ssh'
+        end
+        mv.vm.provision :shell do |shell|
+          shell.name = 'Inclui chave pública do Ansible nas chaves autorizadas'
+          shell.inline = 'grep "`cat $1`" $2 > $3 2>&1 || cat $1 >> $2'
+          shell.args = [
+            '/vagrant/.ssh/id_rsa.pub',
+            '.ssh/authorized_keys',
+            '/dev/null'
+          ]
+        end
+      end
     end
   end
 end
