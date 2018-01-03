@@ -17,11 +17,14 @@ BOXES = {
 }
 
 # Cria par de chaves para autenticação do host de controle com os gerenciados
-require "fileutils"
-FileUtils.cd(File.dirname(__FILE__))
-unless File.file?('.ssh/id_rsa')
-  FileUtils.mkdir('.ssh') unless File.directory?('.ssh')
-  system('ssh-keygen -N "" -t rsa -f .ssh/id_rsa')
+# caso hosts estejam sendo criados ou provisionados
+unless (ARGF.argv() & ['up', 'provision', 'reload']).empty?
+  require "fileutils"
+  FileUtils.cd(File.dirname(__FILE__))
+  unless File.file?('.ssh/id_rsa')
+    FileUtils.mkdir('.ssh') unless File.directory?('.ssh')
+    system('ssh-keygen -N "" -t rsa -f .ssh/id_rsa')
+  end
 end
 
 Vagrant.configure("2") do |config|
