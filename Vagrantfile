@@ -74,6 +74,11 @@ Vagrant.configure("2") do |config|
       end
       if settings.has_key?(:ansible)
         mv.vm.provision :shell do |shell|
+          shell.name = 'Instala Ansible'
+          shell.inline = "apt-get install $1 ansible"
+          shell.args = ['-y -q --allow-unauthenticated']
+        end
+        mv.vm.provision :shell do |shell|
           shell.name = 'Inclui chave privada do Ansible'
           shell.inline = 'diff -q $1 $2 > $3 2>&1 || { cp $1 $2; chown $4 $2;}'
           shell.args = [
