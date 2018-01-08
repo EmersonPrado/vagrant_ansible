@@ -47,15 +47,29 @@ MVS_GERENCIADAS = {
   },
 }
 
-# Cria par de chaves para autenticação do host de controle com os gerenciados
-# caso hosts estejam sendo criados ou provisionados
+# Caso hosts estejam sendo criados ou provisionados,
+# revisa relações de confiança
 unless (ARGF.argv() & ['up', 'provision', 'reload']).empty?
+
+  # Vai para o diretório raiz do projeto para facilitar o trabalho com arquivos
   require "fileutils"
   FileUtils.cd(File.dirname(__FILE__))
+
+  # Cria par de chaves para autenticação do host de controle com os gerenciados
   unless File.file?('.ssh/id_rsa')
     FileUtils.mkdir('.ssh') unless File.directory?('.ssh')
     system('ssh-keygen -N "" -t rsa -f .ssh/id_rsa')
   end
+
+  # Cria arquivo com modelo das entradas para o /etc/hosts do nó de controle
+  File.open(File.join('files', 'hosts'), 'w') do |arq_hosts|
+    MVS_GERENCIADAS.each do |name, settings|
+      settings[:ips].each do |ip|
+        arq_hosts.write("#{ip}\t#{name}.#{DOMAIN}\t#{name}\n")
+      end if settings.has_key?(:ips)
+    end
+  end
+
 end
 
 Vagrant.configure("2") do |config|
