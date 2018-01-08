@@ -16,6 +16,37 @@ BOXES = {
   },
 }
 
+MVS_CONTROLE = {
+  'ansible' => {
+    :box => :debian_8,
+    :ram => 512,
+    :cpu => 1,
+    :ips => ["#{REDE}.2"],
+    :bootstrap => {
+      :playbook => 'ansible/bootstrap.yml',
+      :groups   => {
+        'local' => ['control'],
+        'tudo'  => ['managed'],
+      },
+    },
+    :ansible => {
+      :playbook => 'ansible/playbook.yml',
+      :groups   => {
+        'tudo'  => ['managed'],
+      },
+    },
+  },
+}
+
+MVS_GERENCIADAS = {
+  'nada' => {
+    :box => :debian_8,
+    :ram => 512,
+    :cpu => 1,
+    :ips => ["#{REDE}.3"],
+  },
+}
+
 # Cria par de chaves para autenticação do host de controle com os gerenciados
 # caso hosts estejam sendo criados ou provisionados
 unless (ARGF.argv() & ['up', 'provision', 'reload']).empty?
@@ -28,32 +59,7 @@ unless (ARGF.argv() & ['up', 'provision', 'reload']).empty?
 end
 
 Vagrant.configure("2") do |config|
-  {
-    'managed' => {
-      :box => :debian_8,
-      :ram => 512,
-      :cpu => 1,
-      :ips => ["#{REDE}.3"],
-    },
-    'control' => {
-      :box => :debian_8,
-      :ram => 512,
-      :cpu => 1,
-      :ips => ["#{REDE}.2"],
-      :bootstrap => {
-        :playbook => 'ansible/bootstrap.yml',
-        :groups   => {
-          'local' => ['control'],
-        },
-      },
-      :ansible => {
-        :playbook => 'ansible/playbook.yml',
-        :groups   => {
-          'tudo'  => ['managed'],
-        },
-      },
-    },
-  }.each do |name, settings|
+  (MVS_CONTROLE.merge(MVS_GERENCIADAS)).each do |name, settings|
     config.vm.define name do |mv|
       box = BOXES[settings[:box]]
       mv.vm.box = box[:name]
