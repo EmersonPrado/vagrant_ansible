@@ -119,6 +119,7 @@ Vagrant.configure("2") do |config|
         end
         mv.vm.provision :shell do |shell|
           shell.name = 'Cria relação de confiança com nós gerenciados'
+          shell.privileged = false
           shell.inline = 'for HOST in `awk "$1" $2` ; do ssh -o "$3" $HOST "true" ; done'
           shell.args = [
             '{ print \$NF }',
