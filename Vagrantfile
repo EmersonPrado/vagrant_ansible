@@ -25,7 +25,7 @@ MVS_CONTROLE = {
     :ansible => {
       :playbook => 'ansible/playbook.yml',
       :groups   => {
-        'tudo'  => ['managed'],
+        'tudo'  => ['nada'],
       },
     },
   },
