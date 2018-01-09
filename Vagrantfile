@@ -22,13 +22,6 @@ MVS_CONTROLE = {
     :ram => 512,
     :cpu => 1,
     :ips => ["#{REDE}.2"],
-    :bootstrap => {
-      :playbook => 'ansible/bootstrap.yml',
-      :groups   => {
-        'local' => ['control'],
-        'tudo'  => ['managed'],
-      },
-    },
     :ansible => {
       :playbook => 'ansible/playbook.yml',
       :groups   => {
@@ -113,12 +106,6 @@ Vagrant.configure("2") do |config|
           shell.name = 'Instala Ansible'
           shell.inline = "apt-get install $1 ansible"
           shell.args = ['-y -q --allow-unauthenticated']
-        end
-        mv.vm.provision :ansible_local do |ansible|
-          ansible.install  = false
-          ansible.verbose  = 'vvvv'
-          ansible.playbook = settings[:bootstrap][:playbook]
-          ansible.groups   = settings[:bootstrap][:groups] if settings[:bootstrap].has_key?(:groups)
         end
         mv.vm.provision :shell do |shell|
           shell.name = 'Inclui chave privada do Ansible'
