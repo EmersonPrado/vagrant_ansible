@@ -117,6 +117,15 @@ Vagrant.configure("2") do |config|
             'vagrant:vagrant'
           ]
         end
+        mv.vm.provision :shell do |shell|
+          shell.name = 'Cria relação de confiança com nós gerenciados'
+          shell.inline = 'for HOST in `awk "$1" $2` ; do ssh -o "$3" $HOST "true" ; done'
+          shell.args = [
+            '{ print \$NF }',
+            '/vagrant/files/hosts',
+            'StrictHostKeyChecking no',
+          ]
+        end
       else
         mv.vm.provision :shell do |shell|
           shell.name = 'Inclui chave pública do Ansible nas chaves autorizadas'
