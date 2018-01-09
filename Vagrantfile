@@ -66,7 +66,7 @@ unless (ARGF.argv() & ['up', 'provision', 'reload']).empty?
 end
 
 Vagrant.configure("2") do |config|
-  (MVS_CONTROLE.merge(MVS_GERENCIADAS)).each do |name, settings|
+  (MVS_GERENCIADAS.merge(MVS_CONTROLE)).each do |name, settings|
     config.vm.define name do |mv|
       box = BOXES[settings[:box]]
       mv.vm.box = box[:name]
