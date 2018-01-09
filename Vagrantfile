@@ -101,6 +101,10 @@ Vagrant.configure("2") do |config|
         ]
       end
       mv.vm.provision :shell do |shell|
+        shell.name = 'Configura arquivo /etc/hosts'
+        shell.path = 'scripts/configura_hosts.sh'
+      end
+      mv.vm.provision :shell do |shell|
         shell.name = 'Cria diretório de chaves'
         shell.inline = '[ -d ".ssh" ] || mkdir .ssh'
       end
