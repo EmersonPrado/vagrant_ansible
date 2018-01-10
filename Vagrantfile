@@ -131,6 +131,7 @@ Vagrant.configure("2") do |config|
         mv.vm.provision :ansible_local do |ansible|
           ansible.install  = false
           ansible.playbook = settings[:ansible][:playbook]
+          ansible.verbose  = settings[:ansible][:verbose] if settings[:ansible].has_key?(:verbose)
           ansible.groups   = settings[:ansible][:groups] if settings[:ansible].has_key?(:groups)
           ansible.limit    = settings[:ansible][:limit] if settings[:ansible].has_key?(:limit)
         end
