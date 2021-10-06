@@ -35,6 +35,10 @@ Vagrant.configure("2") do |config|
         shell.name = "Install Ansible"
         shell.path = "bin/install_ansible.sh"
       end if name == 'ansible'
+      vm.vm.provision :file do |file|
+        file.source = "files/.ansible.cfg"
+        file.destination = "~vagrant/.ansible.cfg"
+      end if name == 'ansible'
     end
   end
 end
