@@ -31,6 +31,10 @@ Vagrant.configure("2") do |config|
         shell.path = "bin/ssh_destiny.sh"
         shell.args = origins
       end
+      vm.vm.provision :shell do |shell|
+        shell.name = "Install Ansible"
+        shell.path = "bin/install_ansible.sh"
+      end if name == 'ansible'
     end
   end
 end
