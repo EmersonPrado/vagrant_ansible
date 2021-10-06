@@ -1,0 +1,7 @@
+---
+ansible:
+  :box: debian_11
+  :ram: 512
+  :cpu: 1
+  :ip: 192.168.4.2
+  :ssh_origin: true
