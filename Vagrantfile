@@ -2,8 +2,10 @@ require 'yaml'
 BOXES = YAML.load_file('etc/boxes.yaml')
 VMS = YAML.load_file('etc/vms.yaml')
 destinies = []
+origins = []
 VMS.each do |name, confs|
   destinies << confs[:ip]
+  origins << name if confs.has_key?(:ssh_origin)
 end
 
 Vagrant.configure("2") do |config|
@@ -24,6 +26,11 @@ Vagrant.configure("2") do |config|
         shell.path = "bin/ssh_origin.sh"
         shell.args = [name] + destinies
       end if confs.has_key?(:ssh_origin)
+      vm.vm.provision :shell do |shell|
+        shell.name = "Configure SSH destinies"
+        shell.path = "bin/ssh_destiny.sh"
+        shell.args = origins
+      end
     end
   end
 end
